@@ -1,0 +1,246 @@
+/* Window chrome belongs to AppKit in the desktop build. */
+.native-studio .top{display:none}
+.native-studio body{background:var(--ui-bg)}
+html,body{overscroll-behavior-x:none}
+body{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;margin:0}
+html:not(.native-studio) .top{flex:none;z-index:8;background:var(--ui-bg);color:var(--ui-ink);border:0}
+.studio-layout{
+ --window-unit:var(--window-point,1px);
+ --inspector-min:min(clamp(calc(292 * var(--window-unit)),29vw,calc(420 * var(--window-unit))),50vw);
+ --writer-min:min(clamp(calc(350 * var(--window-unit)),41vw,calc(650 * var(--window-unit))),50vw);
+ --inspector-width:clamp(var(--inspector-min),var(--preferred-rail,0px),50vw);
+ --writer-width:clamp(var(--writer-min),var(--preferred-rail,0px),50vw);
+ --rail-motion:220ms cubic-bezier(.25,.75,.25,1);--right-column:0px;
+ flex:1;min-height:0;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr);position:relative;isolation:isolate;overflow:hidden
+}
+.studio-layout.has-inspector:not(.has-writer):not([data-folding=inspector]),.studio-layout.has-inspector[data-folding=full]{--right-column:var(--inspector-width)}
+.studio-layout.has-writer:not([data-folding=full]){--right-column:var(--writer-width)}
+#studioCenter{grid-column:1;grid-row:1;display:flex;flex-direction:column;width:100%;max-width:none;min-width:0;min-height:0;margin:0;padding:0 clamp(6px,1.3vw,22px) 8px;overflow:clip;container-type:size;background:var(--ui-bg)}
+#studioCenter .heading{flex:none;padding-block:3px 7px;color:var(--ui-ink)}
+#studioCenter .workbench{display:flex;flex:1;min-height:0;height:auto;max-height:none}
+#studioCenter .graphCard{flex:1;min-height:0}
+#studioCenter .graphwrap{flex:1;min-height:0;height:auto}
+#studioCenter :is(.chartHead,.navigator,.caption){flex:none}
+.studio-layout>.inspectorSlot{--rail-inset:clamp(20px,1.8vw,28px);grid-row:1;min-width:0;min-height:0;position:relative;background:var(--ui-surface);z-index:2}
+#writingPane{background:var(--ui-surface);min-width:0;min-height:0;overflow:hidden}
+#rightRail>#writingPane{position:absolute;inset:0 0 0 auto;width:var(--writer-width);z-index:6;transform:translateX(100%);pointer-events:none}
+.has-writer:not([data-folding=full]) #rightRail>#writingPane[data-scope=full]{transform:translateX(0);pointer-events:auto}
+.writer-inner{width:100%;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--ui-surface);font-family:var(--ui-font);color:var(--ui-body)}
+#rightRail{grid-column:2;width:var(--right-column)}
+#rightRail #railDivider{
+ display:none;position:absolute;z-index:7;inset:0 auto 0 -4px;width:9px;
+ touch-action:none;cursor:col-resize;outline:none;user-select:none
+}
+.studio-layout:is(.has-inspector,.has-writer):not([data-folding]) #rightRail #railDivider{display:block}
+#railDivider::after{
+ content:"";position:absolute;inset:0 auto 0 4px;width:2px;
+ background:transparent;transition:background-color 100ms ease
+}
+#railDivider:is(:hover,:focus-visible)::after,.studio-layout.resizing-rail #railDivider::after{background:var(--ui-divider-active)}
+.studio-layout.resizing-rail,.studio-layout.resizing-rail *{cursor:col-resize!important;user-select:none!important}
+.studio-layout.resizing-rail>.inspectorSlot{transition:none}
+#rightRail>#writingPane{border-inline-start:1px solid var(--ui-line)}
+.studio-layout #rightRail .reader{inset:0 0 0 auto;width:var(--inspector-width);height:100%;min-width:var(--inspector-min);max-width:none;margin:0;border:0;border-inline-start:1px solid var(--ui-line);border-radius:0;box-shadow:none;opacity:1;transform:translateX(100%);transition:none}
+#rightRail>#writingPane[data-scope=full]{min-width:var(--writer-min)}
+.has-inspector #rightRail .reader{visibility:visible}
+.has-inspector:not(.has-writer):not([data-folding=inspector]) #rightRail .reader,.has-inspector[data-folding=full] #rightRail .reader{transform:translateX(0);pointer-events:auto}
+.has-inspector #rightRail .railTab,.has-writer #rightRail .railTab{visibility:hidden;pointer-events:none}
+#shotInspector .readerHead{flex:none;padding:18px var(--rail-inset) 14px}
+#shotInspector .readerHead .kicker{margin-bottom:6px}
+#shotInspector .readerHead .controls{flex-wrap:wrap;gap:8px;margin-top:12px}
+#shotInspector #desk{overflow:auto}
+#shotInspector select,#shotInspector textarea,#shotInspector input{min-width:0;max-width:100%}
+.writer-head{position:relative;z-index:2;flex:none;min-height:50px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px var(--rail-inset);background:var(--ui-panel-strip);border-bottom:1px solid var(--ui-line)}
+.writer-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:4px;margin-inline-start:auto;min-width:0;max-width:100%}
+.writer-head button,.doc-float button,#textFormatBar button,#blockPalette button,#writingOutline button{min-height:30px;padding:3px 8px;line-height:1.35;border:0;border-radius:6px;box-shadow:none;background:transparent;color:var(--ui-secondary);font-size:12px;font-weight:500;transform:none}
+.writer-head button:is(:hover,:focus-visible),.writer-head button[aria-pressed=true],.writer-head button[aria-expanded=true],#textFormatBar button:hover,#writingOutline button:hover{background:var(--control-hover)}
+.writer-head svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+#writingOutline{position:absolute;top:100%;left:var(--rail-inset);z-index:4;width:min(310px,calc(100% - var(--rail-inset) - var(--rail-inset)));max-height:min(46vh,440px);overflow:auto;overscroll-behavior:contain;padding:8px;background:var(--ui-surface);border:1px solid var(--ui-line);border-radius:10px;box-shadow:0 8px 24px #1c1c251a}
+#writingOutline summary{padding:6px;cursor:pointer;font-size:13px;font-weight:600}
+#writingOutline button{display:block;width:100%;overflow:hidden;text-overflow:ellipsis;text-align:left;padding:6px 8px 6px 20px}
+#writingOutline button[aria-current=true]{background:var(--control-surface);color:var(--ui-ink)}
+#writingSheet{--gutter:var(--rail-inset);position:relative;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scroll-padding-block:20px;padding:22px var(--gutter) 70px;scrollbar-width:thin}
+#writingSheet .doc-title{font-size:clamp(23px,2.1vw,33px);font-weight:680;line-height:1.25;letter-spacing:-.03em;margin:4px 0 26px}
+#writingSheet .scene-heading{margin:27px 0 14px;font-size:19px;line-height:1.42}
+#writingSheet .shot-heading{font-size:15px;line-height:1.55;letter-spacing:0;margin:24px 0 12px;font-weight:650;scroll-margin-top:14px}
+.shot-heading span{font-size:11px;color:var(--ui-muted);font-variant-numeric:tabular-nums;margin-right:9px}
+.doc-block{margin:0 0 24px;min-width:0}
+.field-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;min-height:26px;margin:0 0 9px;font:500 12px/18px var(--ui-font);color:var(--ui-muted)}
+.field-head .field-name{font-weight:600}
+.field-head .readout-toggle{display:inline-flex;align-items:center;gap:7px;min-height:26px;padding:3px 0 3px 6px;margin-inline-start:auto;border:0;border-radius:4px;background:transparent;box-shadow:none;color:inherit;font:inherit;transform:none}
+.readout-toggle::before{content:"";width:6px;height:6px;box-sizing:border-box;border-right:1.4px solid currentColor;border-bottom:1.4px solid currentColor;transform:rotate(-45deg)}
+.readout-toggle[aria-expanded=true]::before{transform:rotate(45deg)}
+.field-head .readout-toggle:is(:hover,:focus-visible){color:var(--ui-ink)}
+#writingSheet{--text-size:15px;--text-leading:1.72;scrollbar-gutter:stable}
+#writingSheet .manuscriptField,#writingSurface .ProseMirror,#writingFallback{box-sizing:border-box;margin:0;padding:0;border:0;min-height:26px;width:100%;font:400 var(--text-size)/var(--text-leading) var(--ui-font);letter-spacing:normal;white-space:pre-wrap;white-space:break-spaces;overflow-wrap:anywhere;font-variant-ligatures:none;font-feature-settings:"liga" 0;color:var(--ui-body)}
+.manuscriptField{display:flow-root;cursor:text;outline-offset:3px}
+.manuscriptField:empty::before{content:attr(data-placeholder);color:var(--ui-placeholder)}
+#writingSheet .doc-block .toastui-editor-contents p{max-width:none;font-size:inherit;line-height:var(--text-leading);white-space:inherit;color:inherit;margin:0}
+#writingSurface .toastui-editor-ww-container .ProseMirror{display:flow-root;height:auto;overflow:visible}
+#writingSurface .toastui-editor-defaultUI{border:0;border-radius:0;background:transparent}
+#writingSurface .toastui-editor-defaultUI-toolbar,#writingSurface .toastui-editor-toolbar,#writingSurface .toastui-editor-mode-switch,#writingSurface .toastui-editor-md-tab-container{display:none!important}
+#writingSurface .toastui-editor-main,#writingSurface .toastui-editor-md-container,#writingSurface .toastui-editor-ww-container{min-height:26px;background:transparent}
+#writingSurface .ProseMirror{min-height:26px;padding:0;outline:none}
+#writingSurface .ProseMirror:focus-visible{outline:none}
+#writingSurface .toastui-editor-md-preview,#writingSurface .toastui-editor-md-splitter{display:none}
+#writingSurface .toastui-editor-md-container .toastui-editor-md-editor{width:100%;display:block;padding:0}
+#writingSheet[data-mode=markdown] .manuscriptField,#writingSurface .toastui-editor-md-container .ProseMirror,#writingSheet[data-mode=markdown] #writingFallback{font-family:ui-monospace,monospace}
+#writingSurface .toastui-editor-md-container .ProseMirror span{font:inherit;letter-spacing:inherit;padding:0}
+#writingFallback{display:block;resize:none;overflow:hidden;background:transparent}
+#writingSheet .writingReadout{margin:12px 0 0;padding:9px 12px;border-inline-start:2px solid var(--ui-line);color:var(--ui-muted);font:400 13px/1.65 var(--ui-font);white-space:pre-wrap}
+.writer-foot{flex:none;display:flex;justify-content:flex-end;align-items:center;gap:clamp(3px,1vw,8px);min-height:52px;padding:8px var(--rail-inset);border-top:1px solid var(--ui-line);background:var(--ui-panel-strip)}
+.writer-foot button{min-height:32px;font-size:12px;padding:5px clamp(5px,2%,13px);line-height:1.4;border-radius:7px}
+.writer-foot button:last-child:enabled{background:var(--ui-ink);color:var(--ui-on-fill)}
+.writer-foot #quoteWriting{margin-inline-end:auto}
+.writer-foot #quoteWriting[aria-pressed=true],#textFormatBar .format-blockQuote[aria-pressed=true]{
+ background:var(--control-hover);color:var(--ui-ink)
+}
+#writingSheet .toastui-editor-contents blockquote{
+ margin:5px 0;padding:2px 0 2px 12px;border:0;border-inline-start:3px solid var(--ui-quote-rule);
+ min-width:0;max-width:100%;overflow-wrap:anywhere
+}
+#writingSheet .toastui-editor-contents blockquote p{color:var(--ui-quote)}
+#textFormatBar,#blockPalette{position:fixed;z-index:15;background:var(--ui-surface);border:1px solid var(--ui-line);border-radius:9px;box-shadow:0 4px 18px #18182022;padding:4px;color:var(--ui-body)}
+#textFormatBar{display:flex;align-items:center;gap:1px}
+#textFormatBar button{font-size:14px;min-width:30px;flex:none;white-space:nowrap}
+#blockPalette{width:178px;max-height:245px;overflow:auto}
+#blockPalette button{display:flex;justify-content:flex-start;gap:12px;text-align:left;width:100%;font-size:13px;padding:6px 8px}
+#blockPalette button span{width:22px;text-align:center;color:var(--ui-muted)}
+#blockPalette button[aria-selected=true]{background:var(--control-hover)}
+#writingDock{position:relative}
+#writingDock .paragraph-add{position:absolute;top:1px;left:-24px;width:21px;min-height:23px;padding:0;box-shadow:none;border:0;border-radius:5px;background:transparent;color:var(--ui-muted);font:18px/1 var(--ui-font);opacity:0;transform:none}
+#writingDock:is(:hover,:focus-within) .paragraph-add,#writingDock .paragraph-add:focus-visible{opacity:1}
+#writingDock .paragraph-add:hover{background:var(--control-hover)}
+#writingDock[data-mode=markdown] .paragraph-add{display:none}
+#textFormatBar .format-bold{font-weight:750}
+#textFormatBar .format-italic{font-style:italic;font-family:Georgia,serif}
+#textFormatBar .format-strike{text-decoration:line-through}
+#textFormatBar .format-code{font-family:ui-monospace,monospace}
+#writingSheet .shot-heading[aria-current=true] span{color:var(--ui-ink)}
+
+.writer-head button{display:inline-flex;align-items:center;justify-content:center;gap:4px}
+
+#desk #excerptPanel{padding:10px var(--rail-inset) 0}
+.inspector-heading{margin:0 0 12px;font-size:14px;font-weight:680;line-height:1.4;color:var(--ui-ink)}
+#desk .inspector-section-head{display:grid;grid-template-columns:minmax(0,1fr) fit-content(50%);align-items:center;column-gap:12px;margin-bottom:6px}
+.inspector-section-titles{display:grid;row-gap:4px;min-width:0}
+.inspector-section-head .inspector-heading{margin:0}
+#desk .excerpt{border:0}
+#excerptPanel #writingPane,#excerptPanel .writer-inner{width:100%;height:auto;overflow:visible}
+#writingPane[data-scope=shot] .writer-head{display:none}
+#writingPane[data-scope=shot] #writingSheet{flex:none;overflow:visible;padding:0;--text-size:14px;--text-leading:1.6}
+#writingPane[data-scope=shot] .doc-block{margin-bottom:14px}
+#writingPane[data-scope=shot] .field-head{min-height:18px;margin-bottom:4px}
+#writingPane[data-scope=shot]:not(:has(#writingDock:not([hidden]))) .writer-foot{display:none}
+#writingPane[data-scope=shot] .writer-foot{min-height:0;padding:4px 0 8px;border:0;background:transparent}
+#writingSheet .excerpt-cue{margin:0 0 8px;color:var(--ui-ink);line-height:1.7}
+.script-highlight{background:var(--picked-label);color:white;border-radius:4px;padding:1px 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#writingPane[data-scope=full] .writer-head{gap:6px;flex-wrap:wrap}
+#desk #editor{container:parameters / inline-size;padding:18px var(--rail-inset) 28px}
+#editManuscript{min-height:34px;font-size:13px}
+#desk .pathHead{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
+#desk .inspector-section-head select,#desk .pathHead select{justify-self:end;max-width:100%}
+#desk .fields{grid-template-columns:repeat(auto-fit,minmax(min(122px,100%),1fr));gap:14px 12px;margin:18px 0}
+#desk .fields label{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:0;line-height:1.5}
+#desk .fields :is(select,input,button){margin:0;min-width:0;min-height:38px}
+#desk .stageHint{width:100%;padding-inline:8px;font-size:13px;white-space:normal}
+#desk .pathEdit{padding:16px 0;margin:18px 0 10px}
+#desk .stageSwitch{min-height:36px;margin-top:8px}
+#desk .stageSwitch input{flex:none;margin:0}
+#desk #phaseControls{margin:10px 0 0;grid-template-columns:repeat(3,minmax(0,1fr))}
+@container parameters (max-width:330px){
+ #desk #phaseControls{grid-template-columns:minmax(0,1fr);gap:8px}
+ #desk #phaseControls label{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px}
+}
+#editor>details>summary{padding-block:10px}
+#editor #reset{margin-top:12px}
+#studioCenter .chartHead .bar{align-items:center;gap:10px 16px;margin-bottom:12px}
+#studioCenter .chartHead .chartTools{align-items:center;margin-top:0}
+#studioCenter .caption{align-items:center;gap:8px 18px}
+#studioCenter .legend{gap:6px 16px}
+#continuity{flex:none;min-width:0;margin:0;padding:0 var(--rail-inset);border-top:1px solid var(--ui-line);background:var(--ui-panel-strip);color:var(--ui-ink)}
+#continuity summary{padding-block:12px;cursor:pointer;line-height:1.4}
+#continuity .diagBody{max-height:min(29vh,300px);overflow:auto;overscroll-behavior:contain;padding:0 2px 14px}
+#continuity .diag{gap:8px}
+@container (max-height:560px){
+ #studioCenter .chartHead{padding-block:6px}
+ #studioCenter .chartHead .bar{margin-bottom:4px}
+ #studioCenter .navigator{margin-block:0 3px}
+ #studioCenter .caption{padding-block:4px}
+}
+dialog .bar{gap:12px 16px}
+dialog .actions{justify-content:flex-end;gap:8px 12px}
+dialog .sourcebar{align-items:center;gap:10px 12px;padding-block:18px}
+dialog .sourcebar label{display:flex;align-items:center;gap:8px;flex:1 1 180px;min-width:0}
+dialog .sourcebar input{flex:1;min-width:0;max-width:100%}
+dialog .sourcebar #matchCount:empty{display:none}
+#imp .controls{align-items:center;gap:10px 12px}
+#imp #saved{flex:1 1 180px;min-width:0}
+#imp #file{display:block;width:100%;height:auto;padding:8px 10px}
+#exp .project-exports{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:10px;margin:16px 0 20px}
+#exp .project-exports button{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;min-width:0;padding:12px 16px;text-align:start;white-space:normal;line-height:1.45}
+#exp .project-exports small{font-size:.86em;color:var(--ui-muted);font-weight:400}
+#exp h3{margin:0 0 8px;font-size:1em}
+#exp .export-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:12px}
+#exp .export-options select{min-width:0;width:100%}
+
+@media(prefers-reduced-motion:no-preference){
+ .studio-layout>.inspectorSlot{transition:width var(--rail-motion)}
+ .studio-layout #rightRail .reader,#rightRail>#writingPane{transition:transform var(--rail-motion)}
+}
+.changing-interface-zoom .studio-layout>.inspectorSlot{transition:none}
+
+/* Keep the same workspace rows while the content grows inside them. */
+#studioCenter .heading,#studioCenter .headingInfo,#studioCenter .chartHead .bar,
+#studioCenter .chartHead .filterPair,#studioCenter .chartTools,#studioCenter .tabs,
+#studioCenter .caption,#studioCenter .legend{flex-wrap:nowrap;min-width:0}
+#studioCenter .heading{align-items:baseline}
+#studioCenter .heading h1{min-width:0;font-size:13px}
+#studioCenter .headingInfo{max-width:68%;gap:clamp(4px,1.3cqw,16px)}
+#studioCenter :is(.heading h1,#meta,#status,#chartHint,#windowLabel),
+#shotInspector :is(#excerptTitle,#excerptNode){
+ min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+#studioCenter .chartHead{padding-inline:clamp(8px,2.3cqw,32px)}
+#studioCenter .chartHead .bar{gap:clamp(5px,1.4cqw,16px)}
+#studioCenter .chartHead .bar h2{flex:none;white-space:nowrap}
+#studioCenter .chartHead .filterPair{width:auto;justify-content:flex-end}
+#studioCenter .chartTools{gap:clamp(5px,1.4cqw,12px)}
+#studioCenter .tabs{
+ flex:0 1 auto;width:max-content;overflow-x:auto;overflow-y:hidden;
+ overscroll-behavior-x:contain;scrollbar-width:none
+}
+#studioCenter .tabs button{flex:none}
+#studioCenter .zoom{
+ flex:none;margin-inline-start:auto;
+ grid-template-columns:clamp(24px,6cqw,40px) auto clamp(24px,6cqw,40px)
+}
+#studioCenter .zoom button{min-width:0}
+#studioCenter .zoom #zoom{min-width:40px}
+#studioCenter .caption{min-width:0;gap:clamp(6px,1.4cqw,18px)}
+#studioCenter .legend{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+#studioCenter .legend>span{flex:none;white-space:nowrap}
+#studioCenter #chartHint{max-width:48%;text-align:end}
+#studioCenter #windowLabel{max-width:48%}
+#studioCenter .bubble{max-height:calc(100% - 4px);overflow:hidden;overflow-wrap:anywhere}
+#shotInspector .readerHead .controls,#writingPane[data-scope=full] .writer-actions{
+ flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain
+}
+#shotInspector .readerHead .controls{gap:clamp(2px,1vw,8px)}
+#shotInspector .readerHead button,.writer-head button,.writer-foot button{flex:none;white-space:nowrap}
+#writingPane[data-scope=full] .writer-head{flex-wrap:nowrap}
+#writingPane[data-scope=full]{container:writer / inline-size}
+#writingPane[data-scope=full] .writer-actions{justify-content:flex-start}
+@container writer (max-width:305px){
+ .writer-head .tool-caption{display:none}
+ .writer-head{padding-inline:8px}
+ .writer-head button{padding-inline:5px}
+}
+#desk .fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+#shotInspector .readerHead{padding-inline:min(var(--rail-inset),6%)}
+#textFormatBar{overflow-x:auto;overscroll-behavior-x:contain}
+#writingSheet :is(.doc-title,.scene-heading,.shot-heading,.writingReadout),
+#desk :is(.excerpt-cue,.hint,.preview,pre){overflow-wrap:anywhere}
+dialog .bar>div:first-child{min-width:0;max-width:100%}
+dialog .bar h2,.history-entry-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+dialog .bar h2{flex:1}

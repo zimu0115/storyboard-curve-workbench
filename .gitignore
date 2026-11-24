@@ -1,0 +1,10 @@
+/.DS_Store
+**/.DS_Store
+/*.app/
+/dist/
+/build/
+__pycache__/
+*.pyc
+.env
+.env.*
+草稿.json

@@ -1,0 +1,269 @@
+/* The same roles are used by the window content, the manuscript and the SVG. */
+:root {
+  color-scheme: light;
+  --ui-body: #242429;
+  --ui-secondary: #515153;
+  --ui-quote: #53535a;
+  --ui-placeholder: #85858b;
+  --ui-on-fill: #fff;
+  --ui-panel-strip: #fcfcfd;
+  --ui-field: #f6f6f8;
+  --ui-popup: #fff;
+  --ui-backdrop: rgb(17 17 17 / 36%);
+  --ui-card-edge: rgb(17 17 17 / 4%);
+  --ui-quote-rule: #c8c8ce;
+  --ui-divider-active: #96969c;
+  --ui-pressed: #29292b;
+  --ui-mark: #e2e2e6;
+  --finish-hover-bg: var(--control-hover);
+  --finish-hover-ink: var(--ui-ink);
+  --picked-label: var(--picked-point);
+  --plot-line: var(--ui-ink);
+  --plot-band: #f8f8f9;
+  --plot-grid: #e3e3e6;
+  --plot-original: #a2a2aa;
+  --plot-gap: #909097;
+  --plot-guide: #a8a8ae;
+  --plot-window: #1111110b;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  /* Change this base to retint all neutral text. Keep opacity on the ink,
+     so an italic passage inside a quotation does not fade a second time. */
+  --text-rgb: 245 245 247;
+  --ui-ink: rgb(var(--text-rgb) / 97%);
+  --ui-body: rgb(var(--text-rgb) / 90%);
+  --ui-secondary: rgb(var(--text-rgb) / 82%);
+  --ui-quote: rgb(var(--text-rgb) / 74%);
+  --ui-muted: rgb(var(--text-rgb) / 65%);
+  --ui-placeholder: rgb(var(--text-rgb) / 53%);
+  --ui-on-fill: #141416;
+  --ui-accent: var(--ui-ink);
+  --ui-bg: #101114;
+  --ui-surface: #18191d;
+  --ui-panel-strip: #1b1c20;
+  --ui-soft: #202126;
+  --ui-field: var(--ui-soft);
+  --ui-popup: #24252a;
+  --control-surface: #25262b;
+  --control-hover: #323339;
+  --ui-pressed: rgb(var(--text-rgb) / 80%);
+  --ui-mark: #393a41;
+  --ui-line: rgb(var(--text-rgb) / 12%);
+  --ui-card-edge: rgb(var(--text-rgb) / 7%);
+  --ui-line-strong: rgb(var(--text-rgb) / 24%);
+  --ui-quote-rule: rgb(var(--text-rgb) / 33%);
+  --ui-divider-active: var(--ui-placeholder);
+  --ui-backdrop: rgb(0 0 0 / 56%);
+  --menu-shadow: 0 5px 24px rgb(0 0 0 / 42%), 0 0 0 1px var(--ui-line);
+  --ui-shadow-dialog: 0 14px 48px rgb(0 0 0 / 48%);
+  --finish-hover-bg: var(--ui-pressed);
+  --finish-hover-ink: var(--ui-on-fill);
+  --picked-point: #409cff;
+  --picked-label: #165da6;
+  --plot-line: var(--ui-body);
+  --plot-band: #1d1e22;
+  --plot-grid: rgb(var(--text-rgb) / 12%);
+  --plot-original: rgb(var(--text-rgb) / 45%);
+  --plot-gap: var(--ui-muted);
+  --plot-guide: var(--ui-placeholder);
+  --plot-window: rgb(var(--text-rgb) / 9%);
+}
+
+/* Keep the selected plot point, text selections and document highlights legible. */
+[data-theme="dark"] ::selection { color: white; background: var(--picked-label); }
+[data-theme="dark"] :is(input, textarea)::placeholder { color: var(--ui-placeholder); opacity: 1; }
+[data-theme="dark"] :is(input, textarea, [contenteditable="true"]) { caret-color: var(--ui-ink); }
+[data-theme="dark"] :is(.choice-list, #writingOutline, #blockPalette, #textFormatBar, dialog) { background-color: var(--ui-popup); }
+[data-theme="dark"] #writingSheet :is(.manuscriptField, .ProseMirror) :is(h1,h2,h3,h4,h5,h6) {
+  color: var(--ui-ink);
+  border-color: var(--ui-line);
+}
+[data-theme="dark"] #writingSheet .toastui-editor-contents :is(p,ul,ol,li,table) { color: inherit; }
+[data-theme="dark"] #writingSheet .toastui-editor-contents blockquote,
+[data-theme="dark"] #writingSheet .toastui-editor-contents blockquote :is(p,ul,ol) { color: var(--ui-quote); }
+[data-theme="dark"] #writingSheet :is(.placeholder, .toastui-editor-contents del) { color: var(--ui-placeholder); }
+[data-theme="dark"] #writingSheet :is(pre, code, th, .toastui-editor-custom-block-editor) {
+  background-color: var(--ui-field);
+  color: var(--ui-body);
+}
+[data-theme="dark"] #writingSheet pre code { background: transparent; }
+[data-theme="dark"] #writingSheet :is(table, th, td, hr) { border-color: var(--ui-line-strong); }
+[data-theme="dark"] #writingSheet .toastui-editor-cell-selected { background: var(--ui-mark); }
+[data-theme="dark"] #writingSheet .toastui-editor-contents a { color: var(--picked-point); }
+[data-theme="dark"] #writingSheet .toastui-editor-contents ol > li::before { color: var(--ui-muted); }
+[data-theme="dark"] #writingSheet .toastui-editor-contents ul > li:not(.task-list-item)::before { background-color: var(--ui-muted); }
+[data-theme="dark"] #writingSurface .toastui-editor-md-editor span { color: var(--ui-body); }
+[data-theme="dark"] #writingSurface .toastui-editor-md-editor :is(.toastui-editor-md-meta, .toastui-editor-md-delimiter) { color: var(--ui-muted); }
+[data-theme="dark"] #writingSurface .toastui-editor-md-editor .toastui-editor-md-block-quote,
+[data-theme="dark"] #writingSurface .toastui-editor-md-block-quote .toastui-editor-md-marked-text { color: var(--ui-quote); }
+[data-theme="dark"] #writingSurface :is(.toastui-editor-md-code, .toastui-editor-md-code-block-line-background, .toastui-editor-md-custom-block-line-background) { background-color: var(--ui-field); }
+[data-theme="dark"] :is(.toastui-editor-context-menu, .toastui-editor-popup, .toastui-editor-ww-code-block-language) {
+  background-color: var(--ui-popup);
+  color: var(--ui-body);
+  border-color: var(--ui-line);
+}
+[data-theme="dark"] .toastui-editor-context-menu .menu-group { border-color: var(--ui-line); }
+[data-theme="dark"] .toastui-editor-context-menu li:not(.disabled):hover { background-color: var(--control-hover); }
+[data-theme="dark"] .toastui-editor-context-menu li.disabled { color: var(--ui-placeholder); }
+[data-theme="dark"] .toastui-editor-context-menu span::before { filter: invert(1); }
+[data-theme="dark"] .toastui-editor-contents .toastui-editor-ww-code-block::after {
+  color: var(--ui-secondary);
+  background-color: var(--control-surface);
+}
+
+/* Content stays quiet. Translucency and rim light belong to the controls above it. */
+:root {
+  --surface-sheen: rgb(255 255 255 / 60%);
+  --surface-edge: rgb(54 57 68 / 8%);
+  --card-depth: 0 1px 3px rgb(24 28 38 / 4%), 0 6px 18px rgb(24 28 38 / 5%);
+  --glass-tint: rgb(249 249 251 / 91%);
+  --glass-light: rgb(255 255 255 / 78%);
+  --glass-depth: 0 2px 5px rgb(22 24 32 / 8%), 0 9px 26px rgb(22 24 32 / 12%);
+  --control-glint: rgb(255 255 255 / 42%);
+}
+:root[data-theme="dark"] {
+  --surface-sheen: rgb(255 255 255 / 2%);
+  --surface-edge: rgb(235 239 250 / 7%);
+  --card-depth: 0 1px 3px rgb(0 0 0 / 16%), 0 6px 18px rgb(0 0 0 / 18%);
+  --glass-tint: rgb(31 32 37 / 92%);
+  --glass-light: rgb(240 243 252 / 13%);
+  --glass-depth: 0 2px 5px rgb(0 0 0 / 20%), 0 9px 26px rgb(0 0 0 / 29%);
+  --control-glint: rgb(246 248 255 / 7%);
+}
+#studioCenter {
+  background: linear-gradient(160deg, transparent 37%, var(--surface-sheen)), var(--ui-bg);
+}
+#studioCenter .graphCard {
+  border-color: var(--surface-edge);
+  background: var(--ui-surface);
+  box-shadow: inset 0 1px var(--surface-sheen), var(--card-depth);
+}
+#shotInspector .readerHead, .writer-head, #continuity {
+  background-image: linear-gradient(to bottom, var(--surface-sheen), transparent);
+}
+#studioCenter :is(.tabs, .zoom), #desk button.choice-trigger, #exp button.choice-trigger,
+.writer-foot button:enabled, dialog button:is(.primary, .solid) {
+  box-shadow: inset 0 1px var(--control-glint), 0 1px 2px var(--surface-edge);
+}
+#studioCenter :is(.tabs, .zoom) { border-radius: 13px; }
+#tabs[data-positioned]::before, #tabs button, .zoom button { border-radius: 10px; }
+#desk button.choice-trigger, #exp button.choice-trigger { border-radius: 9px; }
+#studioCenter .bubble, .choice-list, #writingOutline, #blockPalette, #textFormatBar, dialog {
+  border: 0;
+  box-shadow: inset 0 1px var(--glass-light), 0 0 0 1px var(--surface-edge), var(--glass-depth);
+}
+#studioCenter .bubble, .choice-list, #writingOutline { border-radius: 13px; }
+@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+  :root #studioCenter .bubble, :root :is(.choice-list, #writingOutline, #blockPalette, #textFormatBar, dialog) {
+    background-color: var(--glass-tint);
+    -webkit-backdrop-filter: saturate(116%) blur(16px);
+    backdrop-filter: saturate(116%) blur(16px);
+  }
+}
+/* Older WebKit positions fixed descendants relative to a filtered dialog. */
+@supports not selector(:popover-open) {
+  :root :is(#exp, dialog[open]) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: var(--ui-popup);
+  }
+}
+#toast {
+  top: auto; right: auto; margin: 0; border: 0;
+  width: max-content; max-width: calc(100vw - 32px);
+  z-index: 100; pointer-events: none;
+}
+/* The grid lives in the scrolling inspector; its add control stays at the foot. */
+:root { --board-matte: #e4e5e9; }
+:root[data-theme="dark"] { --board-matte: #28292e; }
+#boardGallery { width: 100%; display: grid; grid-template-columns: minmax(0,1fr); gap: 4px; }
+#boardGallery:has(.board-tile:not([hidden]) ~ .board-tile:not([hidden])) {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+}
+.board-tile { position: relative; min-width: 0; }
+#boardGallery .board-open {
+  display: block; width: 100%; aspect-ratio: 16/9; min-height: 0; padding: 0;
+  border: 0; border-radius: 0; background: var(--board-matte); overflow: hidden;
+  cursor: zoom-in;
+}
+.board-open img { width: 100%; height: 100%; display: block; object-fit: contain; }
+#boardGallery .board-remove, #boardViewer #closeBoardViewer {
+  position: absolute; top: 6px; right: 6px; z-index: 1; padding: 0;
+  min-height: 26px; width: 26px; height: 26px; border: 0; border-radius: 50%;
+  display: grid; place-items: center; gap: 0;
+  background: rgb(22 23 27 / 78%); color: white;
+}
+:is(.board-remove, #closeBoardViewer)::before,
+:is(.board-remove, #closeBoardViewer)::after {
+  content: ""; grid-area: 1 / 1; width: 12px; height: 1.6px;
+  background: currentColor; border-radius: 1px; transform: rotate(45deg);
+}
+:is(.board-remove, #closeBoardViewer)::after { transform: rotate(-45deg); }
+#boardGallery .board-remove { opacity: 0; pointer-events: none; }
+#boardGallery .board-tile:is(:hover, :focus-within) .board-remove { opacity: 1; pointer-events: auto; }
+@media (hover:none) { #boardGallery .board-remove { opacity: 1; pointer-events: auto; } }
+#shotInspector .readerHead { position: sticky; top: 0; z-index: 1; background-color: var(--ui-surface); }
+#boardFoot {
+  flex: none; position: relative; z-index: 4; padding: 8px var(--rail-inset) 10px;
+  background: var(--ui-panel-strip);
+}
+#boardFoot #addBoards {
+  width: 100%; min-height: 34px; background: var(--control-surface); color: var(--ui-ink);
+  font-size: 13px; font-weight: 550; border-radius: 9px;
+}
+#boardFoot #addBoards:enabled:is(:hover,[aria-expanded=true]) { background: var(--control-hover); }
+#boardSources {
+  position: absolute; bottom: calc(100% - 4px); inset-inline: var(--rail-inset);
+  background: var(--ui-popup); box-shadow: var(--menu-shadow); border-radius: 10px;
+  padding: 4px; transform-origin: center bottom;
+}
+#boardSources button {
+  display: flex; justify-content: start; width: 100%; min-height: 32px; border: 0;
+  padding: 5px 9px; background: transparent; color: var(--ui-ink); font-size: 13px; text-align: start;
+}
+#boardSources button:is(:hover,:focus-visible) { background: var(--control-hover); }
+#boardViewer {
+  width: min(1040px,94vw); max-height: 92vh; box-sizing: border-box;
+  padding: 0; overflow: auto; overscroll-behavior: contain;
+}
+#boardViewer .board-stage { position: relative; background: var(--board-matte); }
+#enlargedBoard { display: block; width: 100%; height: min(60vh,650px); object-fit: contain; }
+#boardViewer #closeBoardViewer { top: 12px; right: 12px; width: 32px; height: 32px; }
+.board-caption { padding: 14px clamp(14px,3vw,28px) 18px; }
+.board-caption-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+#boardViewerTitle { font-size: 16px; line-height: 1.45; margin: 0; overflow-wrap: anywhere; }
+#boardPaging { display: flex; align-items: center; gap: 7px; flex: none; }
+#boardPaging button {
+  width: 28px; height: 28px; min-height: 28px; padding: 0; border: 0; border-radius: 50%;
+  background: var(--control-surface); font-size: 20px;
+}
+#boardPage { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ui-secondary); }
+#boardFacts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 10px 0; font-size: 12px; }
+#boardFacts div { display: inline-flex; flex-wrap: wrap; gap: 5px; }
+#boardFacts dt, #boardStory strong { font-weight: 500; color: var(--ui-muted); }
+#boardFacts dd { margin: 0; color: var(--ui-body); }
+#boardStory { font-size: 13px; }
+#boardStory p { margin: 3px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+#bubble:not([hidden]) { display: flex; flex-direction: column; }
+.storyboard-thumb {
+  display: block;
+  align-self: center;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-width: 100%;
+  max-height: min(15vh, 116px);
+  object-fit: contain;
+  border-radius: 6px;
+  margin: 0 auto 7px;
+}
+#bubbleText { flex: 0 0 auto; }
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  :root #studioCenter .bubble, :root :is(.choice-list, #writingOutline, #blockPalette, #textFormatBar, dialog) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: var(--ui-popup);
+    box-shadow: 0 0 0 1px var(--ui-line-strong), var(--glass-depth);
+  }
+}

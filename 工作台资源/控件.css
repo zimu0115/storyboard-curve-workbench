@@ -1,0 +1,221 @@
+/* Actions inside the workbench use surface and type for emphasis. */
+:root {
+  --picked-point: #0071e3;
+  --control-surface: #f3f3f5;
+  --control-hover: #eaeaec;
+  --menu-shadow: 0 10px 32px rgb(26 26 32 / 13%), 0 2px 7px rgb(26 26 32 / 8%);
+}
+:where(.top, #studioLayout, dialog) button { border-width: 0; }
+.zoom, .railTab, #writingOutline, #textFormatBar, #blockPalette { border: 0; }
+#writingOutline, #textFormatBar, #blockPalette { box-shadow: var(--menu-shadow); }
+:where(.top, dialog) button:not(.primary, .solid, .choice-trigger),
+#editManuscript, #desk .stageHint,
+#diagnosis button { background-color: var(--control-surface); }
+#shotInspector .controls button, dialog button[data-close] { background-color: transparent; }
+@media (hover:hover) {
+  :is(.top, #studioLayout, dialog) button:not(:disabled):hover {
+    box-shadow: none;
+    transform: none;
+  }
+  :is(.top, dialog, .writer-foot, .readerHead, .diag, #desk) button:not(.primary, .solid, .choice-trigger, :disabled):hover {
+    background-color: var(--control-hover);
+  }
+  .writer-foot #finishWriting:enabled:hover {
+    background-color: var(--finish-hover-bg);
+    color: var(--finish-hover-ink);
+  }
+  :is(.primary, .solid):enabled:hover { background-color: var(--ui-pressed); }
+}
+:is(.top, #studioLayout, dialog) button:not(:disabled):active { transform: none; }
+:is(.top, #studioLayout, dialog) button:focus-visible {
+  outline: 2px solid var(--ui-ink);
+  outline-offset: -2px;
+}
+
+#shotInspector .readerHead { border-bottom: 0; }
+#tabs { position: relative; isolation: isolate; }
+#tabs[data-positioned]::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  left: 0;
+  top: 50%;
+  width: var(--tab-width);
+  height: var(--tab-height);
+  border-radius: 8px;
+  background: var(--ui-ink);
+  transform: translate(var(--tab-x), -50%);
+  transition: transform 230ms cubic-bezier(.22,.75,.25,1), width 230ms cubic-bezier(.22,.75,.25,1);
+}
+#tabs button { position: relative; transition: color 140ms ease, background-color 140ms ease; }
+#tabs button.on, #tabs button.on:is(:hover, :active) { background: transparent; color: var(--ui-on-fill); }
+#excerptNode, .choice-list [aria-selected=true]::after { color: var(--ui-ink); }
+#graph .handle:focus-visible { stroke: var(--ui-ink); }
+
+/* Keep the physical input target mounted as the plot strip is redrawn. */
+#graph { touch-action: none; pointer-events: all; }
+#graph * { pointer-events: none; }
+#graph .handle { pointer-events: none; }
+#graph[data-hit=point] { cursor: ns-resize; }
+#graph[data-hit=group] { cursor: pointer; }
+
+button.choice-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 36px;
+  padding: 6px 12px;
+  background: var(--control-surface);
+  border: 0;
+  border-radius: 7px;
+  box-shadow: none;
+  font: 500 13px/1.35 var(--ui-font);
+  text-align: start;
+  color: var(--ui-ink);
+}
+.choice-trigger > span {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.choice-trigger::after {
+  content: "";
+  display: block;
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin: -3px 2px 0 0;
+  border: solid currentColor;
+  border-width: 0 1.4px 1.4px 0;
+  transform: rotate(45deg);
+  transition: transform 160ms ease;
+  opacity: .75;
+}
+.choice-trigger[aria-expanded=true]::after { transform: translateY(3px) rotate(225deg); }
+:is(.choice-list, #writingOutline, #blockPalette, #textFormatBar) { transform-origin: center top; }
+[data-popup-above=true]:is(.choice-list, #blockPalette, #textFormatBar) { transform-origin: center bottom; }
+@media (prefers-reduced-motion: reduce) {
+  #tabs[data-positioned]::before, #tabs button, .choice-trigger::after { transition: none; }
+}
+button.choice-trigger:enabled:is(:hover, [aria-expanded=true]) { background-color: var(--control-hover); }
+#studioCenter .chartHead .filterPair { gap: 2px 9px; min-width: 0; max-width: 100%; }
+.filterPair button.choice-trigger {
+  flex: 0 1 auto;
+  max-width: min(32ch, 100%);
+  min-height: 32px;
+  padding: 4px 7px;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ui-secondary);
+  background: transparent;
+}
+.filterPair button.choice-trigger:enabled:is(:hover, [aria-expanded=true]) { background: var(--control-hover); color: var(--ui-ink); }
+#editor :is(.inspector-section-head, .fields, .pathHead) :is(select, .choice-trigger) {
+  font-size: 13px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+#desk .inspector-section-head .choice-trigger, #desk .pathHead .choice-trigger { justify-self: end; }
+#desk .fields .choice-trigger, #exp .choice-trigger { width: 100%; }
+#imp #saved-choice { flex: 1 1 180px; }
+#file::file-selector-button {
+  font: inherit;
+  color: var(--ui-ink);
+  background: var(--control-surface);
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 9px;
+  margin-inline-end: 8px;
+  cursor: pointer;
+}
+
+#historyDialog { width: min(460px, calc(100vw - 32px)); }
+#historyTitle { margin: 0; font-size: 18px; }
+#historyList {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 2px;
+  display: grid;
+  gap: 3px;
+  max-height: min(52vh, 400px);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+#historyList:empty, #historyStatus:empty { display: none; }
+#historyList button {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 54px;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: transparent;
+  text-align: start;
+}
+#historyList button[aria-current=true] { background: var(--control-surface); }
+.history-entry-info { display: grid; min-width: 0; gap: 4px; }
+.history-entry-name { overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.history-entry-meta, .history-entry-current, #historyStatus { color: var(--ui-muted); font-size: 12px; }
+.history-entry-arrow { color: var(--ui-muted); font-size: 18px; }
+#historyDialog p { margin: 12px 0 0; }
+
+.choice-list {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  z-index: 40;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 16px));
+  box-sizing: border-box;
+  padding: 5px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  background: var(--ui-surface);
+  border-radius: 11px;
+  box-shadow: var(--menu-shadow);
+  color: var(--ui-body);
+  font: 400 13px/1.45 var(--ui-font);
+  text-align: start;
+  user-select: none;
+}
+.choice-list [role=option] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 29px 6px 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.choice-list [aria-selected=true] { font-weight: 600; }
+.choice-list [aria-selected=true]::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: calc(50% - 6px);
+  width: 5px;
+  height: 9px;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(42deg);
+}
+.choice-list .is-current { background: var(--control-surface); }
+.choice-list [aria-disabled=true] { opacity: .45; cursor: default; }
+@media (pointer:coarse) {
+  .filterPair button.choice-trigger, .choice-list [role=option] { min-height: 44px; }
+}
+
+/* Text entry keeps a quiet surface and a visible keyboard focus ring. */
+#desk .fields input[type=number], #editor #note, #threshold,
+dialog :is(input[type=search], input[type=file], textarea) {
+  border-color: transparent;
+  background-color: var(--ui-field);
+}
